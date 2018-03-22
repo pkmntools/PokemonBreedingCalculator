@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+tr { border: none; }
+
+td, th {
+    border-left: 1px solid #dddddd;
+    border-right: 1px solid #dddddd;
+    padding: 8px;
+    text-align: center;
+    vertical-align: center;
+}
+
+select {
+	margin: 0px 20px;
+}
+
+input {
+	margin: 2px;
+    text-align:right;
+}
+
+p {
+ display: inline-block;
+ margin: 2px 20px;
+}
+
+.odds{
+    text-align: right;
+    align: right;
+}
+</style>
+</head>
+<body>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<script src="js/scripts.js"></script>
+
+<h2>Pokemon Breeding Calculator v1.0</h2>
+
+<table>
+  <col width=30%>
+  <col width=30%>
+  <col width=40%>
+  <tr>
+    <th>Parent 1</th>
+    <th>Parent 2</th>
+    <th>Desired</th>
+  </tr>
+  <tr>
+    <td>Species
+	  <input id="p1Species" class="pSpecies"></input>
+	  <select id="p1Gender" class="updateGender">
+  		<option value=0>M</option>
+  		<option value=1>F</option>
+  		<option value=2>?</option>
+	  </select>
+	</td>
+    <td>Species
+	  <input id="p2Species" class="pSpecies"></input>
+	  <select id="p2Gender" class="updateGender">
+  		<option value=0>M</option>
+  		<option value=1>F</option>
+  		<option value=2>?</option>
+	  </select>
+	</td>
+    <td>Species
+	  <input id="childSpecies" disabled="true"></input>
+	</td>
+  </tr>
+  <tr>
+    <td>Ability
+      <select id="p1Ability" class="updateAbility">
+  		<option value=1>Slot 1</option>
+  		<option value=2>Slot 2</option>
+  		<option value=3>Hidden</option>
+	  </select>
+	  <p>Two Slots?</p>
+	  <input id="p1TwoSlots" class="updateAbility" type="checkbox"></input>
+	</td>
+    <td>Ability
+      <select id="p2Ability" class="updateAbility">
+  		<option value=1>Slot 1</option>
+  		<option value=2>Slot 2</option>
+  		<option value=3>Hidden</option>
+	  </select>
+	  <p>Two Slots?</p>
+	  <input id="p2TwoSlots" class="updateAbility" type="checkbox"></input>
+	</td>
+	<td>Ability
+      <select id="childAbility" class="updateAbility">
+      	<option value=-1>Don't Care</option>
+  		<option value=1>Slot 1</option>
+  		<option value=2>Slot 2</option>
+  		<option value=3>Hidden</option>
+	  </select>
+      <p id="abilityOdds">XX.XXXX%</p>
+	</td>
+  </tr>
+  <tr>
+    <td>Nature
+      <select id="p1Nature" class="updateNature">
+  		<option value=0>Hardy</option>
+  		<option value=1>Lonely</option>
+  		<option value=2>Brave</option>
+		<option value=3>Adamant</option>
+		<option value=4>Naughty</option>
+		<option value=5>Bold</option>
+		<option value=6>Docile</option>
+		<option value=7>Relaxed</option>
+		<option value=8>Impish</option>
+		<option value=9>Lax</option>
+		<option value=10>Timid</option>
+		<option value=11>Hasty</option>
+		<option value=12>Serious</option>
+		<option value=13>Jolly</option>
+		<option value=14>Naive</option>
+		<option value=15>Modest</option>
+		<option value=16>Mild</option>
+		<option value=17>Quiet</option>
+		<option value=18>Bashful</option>
+		<option value=19>Rash</option>
+		<option value=20>Calm</option>
+		<option value=21>Gentle</option>
+		<option value=22>Sassy</option>
+		<option value=23>Careful</option>
+		<option value=24>Quirky</option>
+	  </select>
+	</td>
+    <td>Nature
+      <select id="p2Nature" class="updateNature">
+  		<option value=0>Hardy</option>
+  		<option value=1>Lonely</option>
+  		<option value=2>Brave</option>
+		<option value=3>Adamant</option>
+		<option value=4>Naughty</option>
+		<option value=5>Bold</option>
+		<option value=6>Docile</option>
+		<option value=7>Relaxed</option>
+		<option value=8>Impish</option>
+		<option value=9>Lax</option>
+		<option value=10>Timid</option>
+		<option value=11>Hasty</option>
+		<option value=12>Serious</option>
+		<option value=13>Jolly</option>
+		<option value=14>Naive</option>
+		<option value=15>Modest</option>
+		<option value=16>Mild</option>
+		<option value=17>Quiet</option>
+		<option value=18>Bashful</option>
+		<option value=19>Rash</option>
+		<option value=20>Calm</option>
+		<option value=21>Gentle</option>
+		<option value=22>Sassy</option>
+		<option value=23>Careful</option>
+		<option value=24>Quirky</option>
+	  </select>
+	</td>
+	<td>Nature
+      <select id="childNature" class="updateNature">
+  		<option value=-1>Don't Care</option>
+		<option value=0>Hardy</option>
+  		<option value=1>Lonely</option>
+  		<option value=2>Brave</option>
+		<option value=3>Adamant</option>
+		<option value=4>Naughty</option>
+		<option value=5>Bold</option>
+		<option value=6>Docile</option>
+		<option value=7>Relaxed</option>
+		<option value=8>Impish</option>
+		<option value=9>Lax</option>
+		<option value=10>Timid</option>
+		<option value=11>Hasty</option>
+		<option value=12>Serious</option>
+		<option value=13>Jolly</option>
+		<option value=14>Naive</option>
+		<option value=15>Modest</option>
+		<option value=16>Mild</option>
+		<option value=17>Quiet</option>
+		<option value=18>Bashful</option>
+		<option value=19>Rash</option>
+		<option value=20>Calm</option>
+		<option value=21>Gentle</option>
+		<option value=22>Sassy</option>
+		<option value=23>Careful</option>
+		<option value=24>Quirky</option>
+	  </select>
+      <p id="natureOdds">XX.XXXX%</p>
+	</td>
+  </tr>
+  <tr>
+    <td>Item
+      <select id="p1Item" class="updateItem">
+  		<option value=-1>No Item</option>
+  		<option value=6>Destiny Knot</option>
+		<option value=7>Everstone</option>
+  		<option value=0>HP</option>
+		<option value=1>ATK</option>
+		<option value=2>DEF</option>
+		<option value=3>SPE</option>
+		<option value=4>SPA</option>
+		<option value=5>SPD</option>
+	  </select>
+	</td>
+    <td>Item
+      <select id="p2Item" class="updateItem">
+  		<option value=-1>No Item</option>
+  		<option value=6>Destiny Knot</option>
+		<option value=7>Everstone</option>
+  		<option value=0>HP</option>
+		<option value=1>ATK</option>
+		<option value=2>DEF</option>
+		<option value=3>SPE</option>
+		<option value=4>SPA</option>
+		<option value=5>SPD</option>
+	  </select>
+	</td>
+    <td>All IVs
+    	<p class="ivOdds">XX.XXXX%</p>
+	</td>
+  </tr>
+  <tr>
+    <td><p>&nbsp;HP&nbsp;</p><input class="updateIV p1IV slider" type="range" min="0" max="31" value="31"><p>31</p></td>
+    <td><p>&nbsp;HP&nbsp;</p><input class="updateIV p2IV slider" type="range" min="0" max="31" value="31"><p>31</p></td>
+    <td><p>&nbsp;HP&nbsp;</p><input class="updateIV childIV slider" type="range" min="0" max="31" value="31"><p>31</p><p class="odds">XX.XXXX%</p></td>
+  </tr>
+  <tr>
+    <td><p>ATK</p><input class="updateIV p1IV slider" type="range" min="0" max="31" value="31"><p>31</p></td>
+    <td><p>ATK</p><input class="updateIV p2IV slider" type="range" min="0" max="31" value="31"><p>31</p></td>
+    <td><p>ATK</p><input class="updateIV childIV slider" type="range" min="0" max="31" value="31"><p>31</p><p class="odds">XX.XXXX%</p></td>
+  </tr>
+  <tr>
+    <td><p>DEF</p><input class="updateIV p1IV slider" type="range" min="0" max="31" value="31"><p>31</p></td>
+    <td><p>DEF</p><input class="updateIV p2IV slider" type="range" min="0" max="31" value="31"><p>31</p></td>
+    <td><p>DEF</p><input class="updateIV childIV slider" type="range" min="0" max="31" value="31"><p>31</p><p class="odds">XX.XXXX%</p></td>
+  </tr>
+  <tr>
+    <td><p>SPE</p><input class="updateIV p1IV slider" type="range" min="0" max="31" value="31"><p>31</p></td>
+    <td><p>SPE</p><input class="updateIV p2IV slider" type="range" min="0" max="31" value="31"><p>31</p></td>
+    <td><p>SPE</p><input class="updateIV childIV slider" type="range" min="0" max="31" value="31"><p>31</p><p class="odds">XX.XXXX%</p></td>
+  </tr>
+  <tr>
+    <td><p>SPA</p><input class="updateIV p1IV slider" type="range" min="0" max="31" value="31"><p>31</p></td>
+    <td><p>SPA</p><input class="updateIV p2IV slider" type="range" min="0" max="31" value="31"><p>31</p></td>
+    <td><p>SPA</p><input class="updateIV childIV slider" type="range" min="0" max="31" value="31"><p>31</p><p class="odds">XX.XXXX%</p></td>
+  </tr>
+  <tr>
+    <td><p>SPD</p><input class="updateIV p1IV slider" type="range" min="0" max="31" value="31"><p>31</p></td>
+    <td><p>SPD</p><input class="updateIV p2IV slider" type="range" min="0" max="31" value="31"><p>31</p></td>
+    <td><p>SPD</p><input class="updateIV childIV slider" type="range" min="0" max="31" value="31"><p>31</p><p class="odds">XX.XXXX%</p></td>
+  </tr>
+</table>
+
+</body>
+</html>
