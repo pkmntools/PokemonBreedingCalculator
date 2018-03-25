@@ -36,6 +36,11 @@ p {
     text-align: right;
     align: right;
 }
+
+.total{
+	text-align: top;
+	line-height: 100px;
+
 </style>
 </head>
 <body>
@@ -253,7 +258,9 @@ p {
     <td><p>SPD</p><input class="updateIV childIV slider" type="range" min="0" max="31" value="31"><p>31</p><p class="odds">XX.XXXX%</p></td>
   </tr>
 </table>
-
+<div>
+	<p id="totalOdds">XX.XXXX%</p>
+</div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="js/PokemonBreedingCalculator.js"></script>
 </body>

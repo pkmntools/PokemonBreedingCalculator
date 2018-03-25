@@ -1,6 +1,12 @@
 ////////////
 //HTML Interaction
 ////////////
+var ABILITY_ODDS = 0;
+var NATURE_ODDS = 0;
+var IV_ODDS = 0;
+var TOTAL_ODDS;
+
+
 $('.slider').bind('input', function() {
 	$(this).next().html(format($(this).val(), 2, 0));
 });
@@ -22,6 +28,19 @@ function updateAll()
 	updateAbility();
 	updateNature();
 	updateIVs();
+}
+
+function updateTotal()
+{
+	TOTAL_ODDS = ABILITY_ODDS * NATURE_ODDS * IV_ODDS;
+	totalOdds = "TOTAL: " + format(TOTAL_ODDS * 100., 1, 4) + "%, or 1 in " + 
+		Math.ceil(1./TOTAL_ODDS) + " eggs.";
+	totalOdds += "<br>";
+	totalOdds += "<br> 50%: " + Math.ceil(1./(Math.log(1. - TOTAL_ODDS) / Math.log(0.5))) + " eggs";
+	totalOdds += "<br> 75%: " + Math.ceil(1./(Math.log(1. - TOTAL_ODDS) / Math.log(.25))) + " eggs";
+	totalOdds += "<br> 90%: " + Math.ceil(1./(Math.log(1. - TOTAL_ODDS) / Math.log(.1))) + " eggs";
+	totalOdds += "<br> 99%: " + Math.ceil(1./(Math.log(1. - TOTAL_ODDS) / Math.log(.01))) + " eggs";
+	$('#totalOdds').html(totalOdds);
 }
 
 function updateItem()
@@ -51,7 +70,9 @@ function updateIVs()
 		childIVs[i].innerHTML = format(ivOdds[i], 1, 4) + "%";
 	}
 	
-	$('.ivOdds').html(format(ivOdds[NUM_STATS] * 100., 1, 4) + "%");
+	IV_ODDS = ivOdds[NUM_STATS];
+	$('.ivOdds').html(format(IV_ODDS * 100., 1, 4) + "%");
+	updateTotal();
 }
 
 function updateAbility()
@@ -73,9 +94,12 @@ function updateAbility()
 		{species:p1Species, gender:p1Gender, ability:{slot:p1Slot, twoSlots:p1TwoSlots}},
 		{species:p2Species, gender:p2Gender, ability:{slot:p2Slot, twoSlots:p2TwoSlots}},
 		childSlot);
+		
+	ABILITY_ODDS = abilityOdds;
 	abilityOdds *= 100.;
 	
 	$('#abilityOdds').html(format(abilityOdds, 1, 4) + "%");
+	updateTotal();
 }
 
 function updateNature()
@@ -88,9 +112,11 @@ function updateNature()
 	var p2Item = parseInt($('#p2Item').val());
 	
 	var natureOdds = calculateNature({nature:p1Nature, item:p1Item}, {nature:p2Nature, item:p2Item}, childNature);
+	NATURE_ODDS = natureOdds;
 	natureOdds *= 100.;
 	
 	$('#natureOdds').html(format(natureOdds, 1, 4) + "%");
+	updateTotal();
 }
 
 
