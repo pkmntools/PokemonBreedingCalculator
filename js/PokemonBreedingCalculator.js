@@ -11,14 +11,9 @@ $('.slider').bind('input', function() {
 	$(this).next().html(format($(this).val(), 2, 0));
 });
 
-$('.pSpecies').bind('input', function() {
-	var p1Species = $('#p1Species').val();
-	var p2Species = $('#p2Species').val();
-	
-	$('#childSpecies').val(getSpecies(p1Species, p2Species));
-});
-
-$('.updateAbility').change(updateAbility);
+$('.pSpecies').bind('input', updateSpecies);
+$('.updateGender').bind('input', updateGender);
+$('.updateAbility').bind('input', updateAbility);
 $('.updateNature').bind('input', updateNature);
 $('.updateItem').bind('input', updateItem);
 $('.updateIV').bind('input', updateIVs);
@@ -73,6 +68,24 @@ function updateIVs()
 	IV_ODDS = ivOdds[NUM_STATS];
 	$('.ivOdds').html(format(IV_ODDS * 100., 1, 4) + "%");
 	updateTotal();
+}
+
+function updateSpecies()
+{
+	var p1Species = $('#p1Species').val();
+	var p2Species = $('#p2Species').val();
+	
+	var p1Gender = parseInt($('#p1Gender').val());
+	var p2Gender = parseInt($('#p2Gender').val());
+	
+	$('#childSpecies').val(getSpecies({species:p1Species, gender:p1Gender}, {species:p2Species, gender:p2Gender}));
+}
+
+
+function updateGender()
+{
+	updateSpecies();
+	updateAbility();
 }
 
 function updateAbility()
@@ -234,9 +247,20 @@ function isStatItem(item)
 	return item >= 0 && item < NUM_STATS;
 }
 
-function getSpecies(p1Species, p2Species)
+function getSpecies(p1, p2)
 {
-	return (p1Species != "Ditto") ? p1Species : p2Species;
+	if(p1.species == "Ditto")
+	{
+		return p2.species;
+	}
+	else if(p2.species == "Ditto")
+	{
+		return p1.species;
+	}
+	else
+	{
+		return (p1.gender == FEMALE) ? p1.species : p2.species;
+	}
 }
 
 function calculateIVs(p1, p2, thresholds)
@@ -377,62 +401,56 @@ function calculateAbility(p1, p2, slot)
 	}
 	
 	var mother =
-		(p1.gender == FEMALE || p1.species == "Ditto") ?
+		(p1.gender == FEMALE || p2.species == "Ditto") ?
     	p1 :
     	p2;
-    
-    var father = (p1 == mother) ? p2 : p1;
-
-	//handle non-Ditto mother
-	if(mother.species != "Ditto")
-    {
-    	//handle desiring hidden ability
-    	if(slot == 3)
-        {
-        	return (mother.ability.slot == 3) ? 0.8 : 0;
-        }
-    
-    	//handle desiring a non-hidden, single-slot ability
-    	if(!mother.ability.twoSlots)
-        {
-        	return (mother.ability.slot == 3) ? 0.2 : 1;
-        }
-    
-    	//handle desiring a non-hidden, two-slot ability
-    	return (mother.ability.slot == 3) ? 0.1 : 0.5;
-    }
-    //handle Ditto mother and HA father
-    else if (father.ability.slot == 3)
-    {
-    	if(slot == 3)
-        {
-        	return 0.6;
-        }
-        else if(father.ability.twoSlots)
-        {
-        	return 0.2;
-        }
-        else
-        {
-        	return 0.4;
-        }
-    }
-    //handle Ditto mother and non-HA father
-    else
-    {
-    	if(slot == 3)
-        {
-        	return 0;
-        }
-        else if(father.ability.twoSlots)
-        {
-        	return 0.5;
-        }
-        else
-        {
-        	return 1;
-        }
-    }
+		
+	if(mother.gender == FEMALE)
+	{
+		//slot match
+		if(slot == mother.ability.slot)
+		{
+			return (slot == 3 || mother.ability.twoSlots) ? 0.8 : 1;
+		}
+		//slot mismatch, HA desired
+		else if(slot == 3)
+		{
+			return 0;
+		}
+		//slot mismatch, mother has HA
+		else if (mother.ability.slot == 3)
+		{
+			return (mother.ability.twoSlots) ? 0.1 : 0.2;
+		}
+		//slot mismatch, no HA involved
+		else
+		{
+			return (mother.ability.twoSlots) ? 0.2 : 1;
+		}
+	}
+	else //"mother" is male bred with ditto
+	{
+		//slot match
+		if(slot == mother.ability.slot)
+		{
+			return (slot == 3 || mother.ability.twoSlots) ? 0.6 : 1;
+		}
+		//slot mismatch, HA desired
+		else if(slot == 3)
+		{
+			return 0;
+		}
+		//slot mismatch, mother has HA
+		else if (mother.ability.slot == 3)
+		{
+			return (mother.ability.twoSlots) ? 0.2 : 0.4;
+		}
+		//slot mismatch, no HA involved
+		else
+		{
+			return (mother.ability.twoSlots) ? 0.4 : 1;
+		}
+	}
 }
 
 function calculateNature(p1, p2, nature)
