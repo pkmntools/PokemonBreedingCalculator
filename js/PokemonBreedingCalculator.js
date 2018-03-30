@@ -13,7 +13,7 @@ $('.slider').bind('input', function() {
 
 $('.pSpecies').bind('input', updateSpecies);
 $('.updateGender').bind('input', updateGender);
-$('.updateAbility').bind('input', updateAbility);
+$('.updateAbility').change(updateAbility);
 $('.updateNature').bind('input', updateNature);
 $('.updateItem').bind('input', updateItem);
 $('.updateIV').bind('input', updateIVs);
