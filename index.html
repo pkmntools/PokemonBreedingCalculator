@@ -59,7 +59,7 @@ p {
   </tr>
   <tr>
     <td>Species
-	  <input type="text" name="p1Species" id="p1Species" value="" list="speciesList"  class="updateSpecies" />
+	  <input type="text" name="p1Species" id="p1Species" value="" list="speciesList" oninput='updateSpecies()' />
 	  <datalist id="speciesList">
 		<select style="display: none;">
 			<option value="Bulbasaur" />
@@ -888,7 +888,7 @@ p {
 	  </select>
 	</td>
     <td>Species
-	  <input type="text" name="p2Species" id="p1Species" value="" list="speciesList" class="updateSpecies" />
+	  <input type="text" name="p2Species" id="p2Species" value="" list="speciesList" oninput='updateSpecies()' />
 	  <datalist id="speciesList">
 		<select style="display: none;">
 			<option value="Bulbasaur" />
