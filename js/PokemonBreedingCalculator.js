@@ -11,7 +11,7 @@ $('.slider').bind('input', function() {
 	$(this).next().html(format($(this).val(), 2, 0));
 });
 
-$('.pSpecies').change('input', updateSpecies);
+$('.updateSpecies').bind('input', updateSpecies);
 $('.updateGender').bind('input', updateGender);
 $('.updateAbility').change(updateAbility);
 $('.updateNature').bind('input', updateNature);
